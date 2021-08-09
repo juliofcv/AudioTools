@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gd.audio;
 
 import java.io.File;
@@ -18,7 +13,7 @@ import ws.schild.jave.MultimediaObject;
 
 /**
  *
- * @author imstu
+ * @author Julio Chinchilla
  */
 public class FrameSample {
     
@@ -43,7 +38,8 @@ public class FrameSample {
     /**
      * Análisis de audio a partir de un archivo de audio en cualquier formato
      * soportado, se convierte a PCM 16 Bits de forma temporal y se extrae
-     * la duración y un análisis de frame rate
+     * la duración y un análisis de frame rate de la pista, convertido a valores
+     * absolutos en punto flotante, para un análsis de niveles de audio en pista
      * @param f
      * @throws IOException
      * @throws Exception 

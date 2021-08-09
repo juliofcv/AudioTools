@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.gd.audio;
 
-import com.gd.audio.FrameSample;
+package com.gd.audio;
 
 /**
  *
- * @author imstu
+ * @author Julio Chinchilla
  */
 public class Main {
     
