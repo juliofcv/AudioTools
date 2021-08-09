@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.audiotest;
+package com.gd.audio;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import org.apache.commons.io.FilenameUtils;
 import ws.schild.jave.AudioAttributes;
 import ws.schild.jave.Encoder;
 import ws.schild.jave.EncodingAttributes;
@@ -96,9 +95,14 @@ public class FrameSample {
     }
         
     
+    /**
+     * 
+     * @param sourceFile
+     * @param destinationFile
+     * @throws Exception 
+     */
     private static void transcodeToWav(File sourceFile , File destinationFile) throws Exception {
-	AudioAttributes audio = new AudioAttributes();
-        
+	AudioAttributes audio = new AudioAttributes();        
 	audio.setCodec("pcm_s16le");
 	audio.setChannels(2);
 	audio.setSamplingRate(44100);
@@ -107,13 +111,5 @@ public class FrameSample {
 	attributes.setAudioAttributes(audio);
 	new Encoder().encode(new MultimediaObject(sourceFile), destinationFile, attributes);		
     }
-    
-    
-    private static String getFileTitle(String absolutePath) {
-	return FilenameUtils.getBaseName(absolutePath);
-    }
-    
-    
-   
     
 }
