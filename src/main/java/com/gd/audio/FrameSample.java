@@ -25,6 +25,8 @@ public class FrameSample {
     private final float duration;
     private float[] absSamples;
     private final float frameRate;
+    
+    private final static String PCM16 = "pcm_s16le";
 
     public float getDuration() {
         return duration;
@@ -38,12 +40,19 @@ public class FrameSample {
         return frameRate;
     }
     
+    /**
+     * Análisis de audio a partir de un archivo de audio en cualquier formato
+     * soportado, se convierte a PCM 16 Bits de forma temporal y se extrae
+     * la duración y un análisis de frame rate
+     * @param f
+     * @throws IOException
+     * @throws Exception 
+     */
     public FrameSample (String f) throws IOException, Exception {
         File file = new File(f);
         float[] samples;
-        
         File temporalDecodedFile = File.createTempFile("decoded_audio", ".wav");
-        transcodeToWav(file, temporalDecodedFile);
+        transcodeAudioStereo(file, temporalDecodedFile, PCM16, "wav", 44100);
         temporalDecodedFile.deleteOnExit();
         AudioInputStream in = AudioSystem.getAudioInputStream(temporalDecodedFile);
         AudioFormat fmt = in.getFormat();
@@ -96,18 +105,18 @@ public class FrameSample {
         
     
     /**
-     * 
+     * Transcode audio
      * @param sourceFile
      * @param destinationFile
      * @throws Exception 
      */
-    private static void transcodeToWav(File sourceFile , File destinationFile) throws Exception {
+    private static void transcodeAudioStereo(File sourceFile , File destinationFile, String codec, String format, int sampling) throws Exception {
 	AudioAttributes audio = new AudioAttributes();        
-	audio.setCodec("pcm_s16le");
+	audio.setCodec(codec);
 	audio.setChannels(2);
-	audio.setSamplingRate(44100);
+	audio.setSamplingRate(sampling);
 	EncodingAttributes attributes = new EncodingAttributes();
-	attributes.setFormat("wav");
+	attributes.setFormat(format);
 	attributes.setAudioAttributes(audio);
 	new Encoder().encode(new MultimediaObject(sourceFile), destinationFile, attributes);		
     }
