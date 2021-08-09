@@ -17,9 +17,9 @@ import ws.schild.jave.MultimediaObject;
  */
 public class FrameSample {
     
-    private final float duration;
+    private float duration;
     private float[] absSamples;
-    private final float frameRate;
+    private float frameRate;
     
     private final static String PCM16 = "pcm_s16le";
 
@@ -35,22 +35,31 @@ public class FrameSample {
         return frameRate;
     }
     
+    public FrameSample(String d) throws Exception {
+        File f = new File(d);
+        try {
+            SamplingPCM16 (f);
+        } catch (Exception e) {
+            System.out.println("Trying converting");
+            File temporalDecodedFile = File.createTempFile("decoded_audio", ".wav");
+            transcodeAudioStereo(f, temporalDecodedFile, PCM16, "wav", 44100);
+            SamplingPCM16(temporalDecodedFile);
+            temporalDecodedFile.delete();
+            temporalDecodedFile.deleteOnExit();
+        }
+    }
+    
     /**
-     * Análisis de audio a partir de un archivo de audio en cualquier formato
-     * soportado, se convierte a PCM 16 Bits de forma temporal y se extrae
+     * Análisis de audio soporte de archivos PCM 16 Bits extrayendo
      * la duración y un análisis de frame rate de la pista, convertido a valores
      * absolutos en punto flotante, para un análsis de niveles de audio en pista
      * @param f
      * @throws IOException
      * @throws Exception 
      */
-    public FrameSample (String f) throws IOException, Exception {
-        File file = new File(f);
+    private void SamplingPCM16 (File f) throws IOException, Exception {
         float[] samples;
-        File temporalDecodedFile = File.createTempFile("decoded_audio", ".wav");
-        transcodeAudioStereo(file, temporalDecodedFile, PCM16, "wav", 44100);
-        temporalDecodedFile.deleteOnExit();
-        AudioInputStream in = AudioSystem.getAudioInputStream(temporalDecodedFile);
+        AudioInputStream in = AudioSystem.getAudioInputStream(f);
         AudioFormat fmt = in.getFormat();
         frameRate = fmt.getFrameRate();
         duration = in.getFrameLength() / fmt.getFrameRate();
@@ -94,14 +103,12 @@ public class FrameSample {
                 samples[i++] = Math.abs((float) ( sum / chans ));
             }
         }
-        temporalDecodedFile.delete();
-        temporalDecodedFile.deleteOnExit();
         this.absSamples = samples;
     }
         
     
     /**
-     * Transcode audio
+     * Transcode audio in PCM16 using FFMPEG
      * @param sourceFile
      * @param destinationFile
      * @throws Exception 

@@ -1,6 +1,8 @@
 
 package com.gd.audio;
 
+import java.io.File;
+
 /**
  *
  * @author Julio Chinchilla
@@ -8,7 +10,7 @@ package com.gd.audio;
 public class Main {
     
     public static void main (String... args) throws Exception {
-        FrameSample fs = new FrameSample("D:\\ccc.mp3");
+        FrameSample fs = new FrameSample("D:\\dd.mp3");
         for (float i : fs.getSamples()) {
             System.out.println(i);
         }
